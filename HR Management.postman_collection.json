@@ -1,0 +1,454 @@
+{
+	"info": {
+		"_postman_id": "e4873fb0-f292-4792-87d8-2b38e2754edc",
+		"name": "HR Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16307692"
+	},
+	"item": [
+		{
+			"name": "HRManagement",
+			"item": [
+				{
+					"name": "Worker",
+					"item": [
+						{
+							"name": "Get Workers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/worker",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"worker"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Workers CSV",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/worker/workersCSV",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"worker",
+										"workersCSV"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Worker By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/worker/1",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"worker",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Worker",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"personId\": 1,\n    \"rol\": \"manager\",\n    \"salary\": 500\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/worker",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"worker"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Worker",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"rol\": \"specialist\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/worker/1",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"worker",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Worker",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/worker/11",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"worker",
+										"11"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Salary",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/worker/updateSalary/1/2023-07-04",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"worker",
+										"updateSalary",
+										"1",
+										"2023-07-04"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Person",
+					"item": [
+						{
+							"name": "Get People",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/person",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"person"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Person by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/person/6",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"person",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Person",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Juan\",\n    \"lastname\": \"Bravo\",\n    \"email\": \"juan.bravo@gmail.com\",\n    \"personalAddress\": \"Purple house\",\n    \"phone\": 123345479,\n    \"picture\": \"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\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/person",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"person"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Person",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Juan_1\",\n    \"lastname\": \"Bravo_1\",\n    \"email\": \"juan.bravo_1@gmail.com\",\n    \"personalAddress\": \"Purple house _ 1\",\n    \"phone\": 1434343\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/person/6",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"person",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Person",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/person/6",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"person",
+										"6"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Database",
+					"item": [
+						{
+							"name": "Create Database",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/db",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"db"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Insert Data Person",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/db/insertDataPerson",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"db",
+										"insertDataPerson"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Insert Data Worker",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/db/insertDataWorker",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"db",
+										"insertDataWorker"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Insert Data Salary",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/db/insertDataSalary",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"db",
+										"insertDataSalary"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Salary",
+					"item": [
+						{
+							"name": "Get Salaries",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/salary",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"salary"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Salary By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/salary/1",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"salary",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Worker Hstorical Salaries",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HR_MANAGEMENT}}/api/salary/historicalSalariesCSV/7",
+									"host": [
+										"{{HR_MANAGEMENT}}"
+									],
+									"path": [
+										"api",
+										"salary",
+										"historicalSalariesCSV",
+										"7"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
