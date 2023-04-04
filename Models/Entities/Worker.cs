@@ -13,7 +13,7 @@ namespace HRManagement.Models.Entities
 		public string? Rol { get; set; }
 		public DateTime WorkingStartDate { get; set; }
 		public float Salary { get; set; }
-		public Person? Person { get; set; }
+		public virtual Person? Person { get; set; }
 
 		[JsonIgnore]
 		public virtual ICollection<Salary>? Salaries { get; set; }

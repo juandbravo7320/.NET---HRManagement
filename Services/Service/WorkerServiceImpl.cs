@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using HRManagement.Models.DTO;
 using HRManagement.Models.Entities;
 using HRManagement.Models.Mapper;
 using HRManagement.Services.Interfaces;
+using HRManagement.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace HRManagement.Services.Service
@@ -24,16 +21,11 @@ namespace HRManagement.Services.Service
 			salaryService = s_service;
 		}
 
-		public List<WorkerDTO> GetAll()
+		public List<Worker> GetAll()
 		{
 			List<Worker> workers = (context.Workers?.Include(p => p.Person)).ToList();
 
-			workers.ForEach(worker => {
-				Salary salary = salaryService.GetByWorkerId(worker.WorkerId);
-				worker.Salary = salary.SalaryValue;
-			});
-
-			return workers.Select(worker => workerMapper.mapToWorkerDTO(worker)).ToList();
+			return workers;
 		}
 
 		public WorkerDTO GetWorkerById(long id)
@@ -51,7 +43,10 @@ namespace HRManagement.Services.Service
 
 		public WorkerDTO Save(Worker worker)
 		{
+			Person person = context.People.Find(worker.PersonId);
+			worker.Person = person;
 			Worker workerCreated = context.Add(worker).Entity;
+			context.SaveChanges();
 
 			Salary newSalary = new Salary();
 			newSalary.WorkerId = worker.WorkerId;
@@ -59,14 +54,12 @@ namespace HRManagement.Services.Service
 			newSalary.Active = true;
 
 			salaryService.Save(newSalary);
-
-			context.SaveChanges();
 			return workerMapper.mapToWorkerDTO(workerCreated);
 		}
 
 		public WorkerDTO Update(long id, Worker worker)
 		{
-			Worker currentWorker = context.Workers.Find(id);
+			Worker currentWorker = context.Workers.Include(w => w.Person).SingleOrDefault(w => w.WorkerId == id);
 
 			if (worker == null) return null;
 
@@ -79,7 +72,10 @@ namespace HRManagement.Services.Service
 
 		public WorkerDTO Delete(long id)
 		{
-			Worker currentWorker = context.Workers.Find(id);
+			Worker currentWorker = context.Workers.Include(w => w.Person).SingleOrDefault(w => w.WorkerId == id);
+
+			if (currentWorker == null) return null;
+
 			Worker workerDeleted = context.Workers.Remove(currentWorker).Entity;
 			context.SaveChanges();
 			return workerMapper.mapToWorkerDTO(workerDeleted);
@@ -92,6 +88,12 @@ namespace HRManagement.Services.Service
 			Worker currentWorker = context.Workers.SingleOrDefault(w => w.WorkerId == id);
 
 			if (currentWorker == null) return false;
+
+			if (currentDate < currentWorker.WorkingStartDate) return false;
+
+			TimeSpan diference = currentDate - currentWorker.WorkingStartDate;
+
+			if (diference.TotalDays < 90) return false;
 
 			int periods = calculatePeriods(currentDate, currentWorker.WorkingStartDate);
 
@@ -127,13 +129,19 @@ namespace HRManagement.Services.Service
 			currentWorker.Salary = newSalary.SalaryValue;
 			context.SaveChanges();
 
-
 			return true;
 		}
 
 		public int calculatePeriods(DateTime currentDate, DateTime workingStartDate)
 		{
 			return (((currentDate.Year - workingStartDate.Year) * 12) + (currentDate.Month - workingStartDate.Month)) / 3;
+		}
+
+		public MemoryStream GetWorkerCsv()
+		{
+			List<Worker> workers = (context.Workers?.Include(p => p.Person)).ToList();
+			MemoryStream csvStream = Csv.ExportCSV("users", workers);
+			return csvStream;
 		}
 	}
 }

@@ -3,6 +3,7 @@ using HRManagement.Models.Mapper;
 using HRManagement.Services;
 using HRManagement.Services.Interfaces;
 using HRManagement.Services.Service;
+using HRManagement.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 

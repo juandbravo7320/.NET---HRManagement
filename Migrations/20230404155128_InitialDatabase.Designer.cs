@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRManagement.Migrations
 {
     [DbContext(typeof(HRManagementContext))]
-    [Migration("20230402134056_Initial Database")]
+    [Migration("20230404155128_InitialDatabase")]
     partial class InitialDatabase
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace HRManagement.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("HRManagement.Models.Person", b =>
+            modelBuilder.Entity("HRManagement.Models.Entities.Person", b =>
                 {
                     b.Property<long>("PersonId")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,6 @@ namespace HRManagement.Migrations
                         .HasColumnType("int");
 
                     b.Property<byte[]>("Picture")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.HasKey("PersonId")
@@ -114,7 +113,118 @@ namespace HRManagement.Migrations
                         });
                 });
 
-            modelBuilder.Entity("HRManagement.Models.Worker", b =>
+            modelBuilder.Entity("HRManagement.Models.Entities.Salary", b =>
+                {
+                    b.Property<long>("SalaryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("SalaryId"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("SalaryUpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<float>("SalaryValue")
+                        .HasColumnType("real");
+
+                    b.Property<long>("WorkerId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("SalaryId");
+
+                    b.HasIndex("WorkerId");
+
+                    b.ToTable("Salary", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            SalaryId = 1L,
+                            Active = true,
+                            SalaryUpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SalaryValue = 100f,
+                            WorkerId = 1L
+                        },
+                        new
+                        {
+                            SalaryId = 2L,
+                            Active = true,
+                            SalaryUpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SalaryValue = 100f,
+                            WorkerId = 2L
+                        },
+                        new
+                        {
+                            SalaryId = 3L,
+                            Active = true,
+                            SalaryUpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SalaryValue = 100f,
+                            WorkerId = 3L
+                        },
+                        new
+                        {
+                            SalaryId = 4L,
+                            Active = true,
+                            SalaryUpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SalaryValue = 100f,
+                            WorkerId = 4L
+                        },
+                        new
+                        {
+                            SalaryId = 5L,
+                            Active = true,
+                            SalaryUpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SalaryValue = 200f,
+                            WorkerId = 5L
+                        },
+                        new
+                        {
+                            SalaryId = 6L,
+                            Active = true,
+                            SalaryUpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SalaryValue = 200f,
+                            WorkerId = 6L
+                        },
+                        new
+                        {
+                            SalaryId = 7L,
+                            Active = true,
+                            SalaryUpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SalaryValue = 200f,
+                            WorkerId = 7L
+                        },
+                        new
+                        {
+                            SalaryId = 8L,
+                            Active = true,
+                            SalaryUpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SalaryValue = 200f,
+                            WorkerId = 8L
+                        },
+                        new
+                        {
+                            SalaryId = 9L,
+                            Active = true,
+                            SalaryUpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SalaryValue = 300f,
+                            WorkerId = 9L
+                        },
+                        new
+                        {
+                            SalaryId = 10L,
+                            Active = true,
+                            SalaryUpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SalaryValue = 300f,
+                            WorkerId = 10L
+                        });
+                });
+
+            modelBuilder.Entity("HRManagement.Models.Entities.Worker", b =>
                 {
                     b.Property<long>("WorkerId")
                         .ValueGeneratedOnAdd()
@@ -129,8 +239,7 @@ namespace HRManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("Salary")
-                        .IsRequired()
+                    b.Property<float>("Salary")
                         .HasColumnType("real");
 
                     b.Property<DateTime>("WorkingStartDate")
@@ -151,7 +260,7 @@ namespace HRManagement.Migrations
                             WorkerId = 1L,
                             PersonId = 1L,
                             Rol = "worker",
-                            Salary = 100f,
+                            Salary = 0f,
                             WorkingStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -159,7 +268,7 @@ namespace HRManagement.Migrations
                             WorkerId = 2L,
                             PersonId = 2L,
                             Rol = "worker",
-                            Salary = 100f,
+                            Salary = 0f,
                             WorkingStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -167,7 +276,7 @@ namespace HRManagement.Migrations
                             WorkerId = 3L,
                             PersonId = 3L,
                             Rol = "worker",
-                            Salary = 100f,
+                            Salary = 0f,
                             WorkingStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -175,7 +284,7 @@ namespace HRManagement.Migrations
                             WorkerId = 4L,
                             PersonId = 5L,
                             Rol = "worker",
-                            Salary = 100f,
+                            Salary = 0f,
                             WorkingStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -183,7 +292,7 @@ namespace HRManagement.Migrations
                             WorkerId = 5L,
                             PersonId = 1L,
                             Rol = "specialist",
-                            Salary = 200f,
+                            Salary = 0f,
                             WorkingStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -191,7 +300,7 @@ namespace HRManagement.Migrations
                             WorkerId = 6L,
                             PersonId = 2L,
                             Rol = "specialist",
-                            Salary = 200f,
+                            Salary = 0f,
                             WorkingStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -199,7 +308,7 @@ namespace HRManagement.Migrations
                             WorkerId = 7L,
                             PersonId = 3L,
                             Rol = "specialist",
-                            Salary = 200f,
+                            Salary = 0f,
                             WorkingStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -207,7 +316,7 @@ namespace HRManagement.Migrations
                             WorkerId = 8L,
                             PersonId = 4L,
                             Rol = "specialist",
-                            Salary = 200f,
+                            Salary = 0f,
                             WorkingStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -215,7 +324,7 @@ namespace HRManagement.Migrations
                             WorkerId = 9L,
                             PersonId = 5L,
                             Rol = "manager",
-                            Salary = 300f,
+                            Salary = 0f,
                             WorkingStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -223,23 +332,34 @@ namespace HRManagement.Migrations
                             WorkerId = 10L,
                             PersonId = 4L,
                             Rol = "manager",
-                            Salary = 300f,
+                            Salary = 0f,
                             WorkingStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
-            modelBuilder.Entity("HRManagement.Models.Worker", b =>
+            modelBuilder.Entity("HRManagement.Models.Entities.Salary", b =>
                 {
-                    b.HasOne("HRManagement.Models.Person", "Person")
+                    b.HasOne("HRManagement.Models.Entities.Worker", "Worker")
+                        .WithMany()
+                        .HasForeignKey("WorkerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Worker");
+                });
+
+            modelBuilder.Entity("HRManagement.Models.Entities.Worker", b =>
+                {
+                    b.HasOne("HRManagement.Models.Entities.Person", "Person")
                         .WithMany("Workers")
                         .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Person");
                 });
 
-            modelBuilder.Entity("HRManagement.Models.Person", b =>
+            modelBuilder.Entity("HRManagement.Models.Entities.Person", b =>
                 {
                     b.Navigation("Workers");
                 });

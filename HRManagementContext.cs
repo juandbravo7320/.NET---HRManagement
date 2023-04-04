@@ -76,7 +76,7 @@ namespace HRManagement
                 person.Property(p => p.Email).IsRequired();
                 person.Property(p => p.PersonalAddress).IsRequired();
                 person.Property(p => p.Phone);
-                person.Property(p => p.Picture).IsRequired();
+                person.Property(p => p.Picture).IsRequired(false);
                 person.HasMany<Worker>(p => p.Workers).WithOne(p => p.Person);
                 person.Ignore(p => p.Workers);
 
@@ -85,17 +85,6 @@ namespace HRManagement
 
             // ? Initial Data
             List<Worker> workersInit = new List<Worker>();
-            // workersInit.Add(new Worker() {WorkerId = 1, PersonId = 1, Rol = "worker", SalaryId = 1});
-            // workersInit.Add(new Worker() {WorkerId = 2, PersonId = 2, Rol = "worker", SalaryId = 2});
-            // workersInit.Add(new Worker() {WorkerId = 3, PersonId = 3, Rol = "worker", SalaryId = 3});
-            // workersInit.Add(new Worker() {WorkerId = 4, PersonId = 5, Rol = "worker", SalaryId = 4});
-            // workersInit.Add(new Worker() {WorkerId = 5, PersonId = 1, Rol = "specialist", SalaryId = 5});
-            // workersInit.Add(new Worker() {WorkerId = 6, PersonId = 2, Rol = "specialist", SalaryId = 6});
-            // workersInit.Add(new Worker() {WorkerId = 7, PersonId = 3, Rol = "specialist", SalaryId = 7});
-            // workersInit.Add(new Worker() {WorkerId = 8, PersonId = 4, Rol = "specialist", SalaryId = 8});
-            // workersInit.Add(new Worker() {WorkerId = 9, PersonId = 5, Rol = "manager", SalaryId = 9});
-            // workersInit.Add(new Worker() {WorkerId = 10, PersonId = 4, Rol = "manager", SalaryId = 10});
-
             workersInit.Add(new Worker() {WorkerId = 1, PersonId = 1, Rol = "worker"});
             workersInit.Add(new Worker() {WorkerId = 2, PersonId = 2, Rol = "worker"});
             workersInit.Add(new Worker() {WorkerId = 3, PersonId = 3, Rol = "worker"});
@@ -112,7 +101,7 @@ namespace HRManagement
                 worker.ToTable("Worker");
                 worker.HasKey(p => p.WorkerId).HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
                 worker.HasOne<Person>(p => p.Person).WithMany(p => p.Workers).HasForeignKey(p => p.PersonId);
-                worker.HasMany<Salary>(w => w.Salaries).WithOne(s => s.Worker).HasForeignKey(w => w.WorkerId).OnDelete(DeleteBehavior.Cascade);
+                worker.HasMany<Salary>(w => w.Salaries).WithOne(s => s.Worker).HasForeignKey(w => w.WorkerId);
                 worker.Property(p => p.Rol).IsRequired();
                 worker.Property(w => w.Salary);
                 worker.Property(p => p.WorkingStartDate).IsRequired().HasDefaultValueSql("GETDATE()");
@@ -137,7 +126,6 @@ namespace HRManagement
             modelBuilder.Entity<Salary>(salary => {
                 salary.ToTable("Salary");
                 salary.HasKey(p => p.SalaryId);
-                // salary.HasOne<Worker>(s => s.Worker).WithMany(w => w.Salaries).HasForeignKey(s => s.WorkerId).OnDelete(DeleteBehavior.Cascade);
                 salary.Property(p => p.SalaryUpdateDate).IsRequired().HasDefaultValueSql("GETDATE()");
                 salary.Property(p => p.SalaryValue).IsRequired();
                 salary.Property(p => p.Active);

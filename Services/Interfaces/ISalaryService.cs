@@ -17,5 +17,7 @@ namespace HRManagement.Services.Interfaces
         Salary Save(Salary salary);
 
         void DisableSalary(long id);
+
+        MemoryStream GetWorkerHistoricalSalaries(long id);
     }
 }

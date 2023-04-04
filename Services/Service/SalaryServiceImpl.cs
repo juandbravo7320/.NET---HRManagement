@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HRManagement.Models.DTO;
 using HRManagement.Models.Entities;
+using HRManagement.Models.Mapper;
 using HRManagement.Services.Interfaces;
+using HRManagement.Utilities;
 
 namespace HRManagement.Services.Service
 {
@@ -11,10 +14,12 @@ namespace HRManagement.Services.Service
 	{
 
 		HRManagementContext context;
+		SalaryMapper salaryMapper;
 
-		public SalaryServiceImpl(HRManagementContext HRManagementContext)
+		public SalaryServiceImpl(HRManagementContext HRManagementContext, SalaryMapper s_mapper)
 		{
 			context = HRManagementContext;
+			salaryMapper = s_mapper;
 		}
 
 		public IEnumerable<Salary> GetAll()
@@ -29,7 +34,7 @@ namespace HRManagement.Services.Service
 			return salary;
 		}
 
-        public Salary GetByWorkerId(long id)
+		public Salary GetByWorkerId(long id)
 		{
 			Salary salary = context.Salaries.Where(s => s.Active == true).SingleOrDefault(s => s.WorkerId == id);
 			if (salary == null) return null;
@@ -49,6 +54,15 @@ namespace HRManagement.Services.Service
 			if (salary == null) return;
 			salary.Active = false;
 			context.SaveChanges();
+		}
+
+		public MemoryStream GetWorkerHistoricalSalaries(long id)
+		{
+			List<Salary> salaries = (context.Salaries?.Where(s => s.WorkerId == id).OrderByDescending(s => s.SalaryUpdateDate)).ToList();
+			List<SalaryDTO> salariesDTO = salaries.Select(s => salaryMapper.mapToSalaryDTO(s)).ToList();
+
+			MemoryStream csvStream = Csv.ExportCSV("users", salariesDTO);
+			return csvStream;
 		}
 	}
 }

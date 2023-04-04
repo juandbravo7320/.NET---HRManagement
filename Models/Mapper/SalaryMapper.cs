@@ -17,6 +17,7 @@ namespace HRManagement.Models.Mapper
 
             dto.SalaryId = salary.SalaryId;
             dto.SalaryValue = salary.SalaryValue;
+            dto.SalaryUpdateDate = salary.SalaryUpdateDate;
 
             return dto;
         }

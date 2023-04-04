@@ -11,5 +11,6 @@ namespace HRManagement.Models.DTO
 
 		public long SalaryId { get; set; }
 		public float SalaryValue { get; set; }
+		public DateTime SalaryUpdateDate { get; set; }
 	}
 }

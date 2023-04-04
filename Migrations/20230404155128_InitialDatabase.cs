@@ -24,7 +24,7 @@ namespace HRManagement.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PersonalAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<int>(type: "int", nullable: false),
-                    Picture = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    Picture = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,8 +39,8 @@ namespace HRManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PersonId = table.Column<long>(type: "bigint", nullable: false),
                     Rol = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Salary = table.Column<float>(type: "real", nullable: false),
-                    WorkingStartDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
+                    WorkingStartDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    Salary = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,6 +50,28 @@ namespace HRManagement.Migrations
                         column: x => x.PersonId,
                         principalTable: "Person",
                         principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Salary",
+                columns: table => new
+                {
+                    SalaryId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WorkerId = table.Column<long>(type: "bigint", nullable: false),
+                    SalaryUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    SalaryValue = table.Column<float>(type: "real", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Salary", x => x.SalaryId);
+                    table.ForeignKey(
+                        name: "FK_Salary_Worker_WorkerId",
+                        column: x => x.WorkerId,
+                        principalTable: "Worker",
+                        principalColumn: "WorkerId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -70,17 +92,39 @@ namespace HRManagement.Migrations
                 columns: new[] { "WorkerId", "PersonId", "Rol", "Salary" },
                 values: new object[,]
                 {
-                    { 1L, 1L, "worker", 100f },
-                    { 2L, 2L, "worker", 100f },
-                    { 3L, 3L, "worker", 100f },
-                    { 4L, 5L, "worker", 100f },
-                    { 5L, 1L, "specialist", 200f },
-                    { 6L, 2L, "specialist", 200f },
-                    { 7L, 3L, "specialist", 200f },
-                    { 8L, 4L, "specialist", 200f },
-                    { 9L, 5L, "manager", 300f },
-                    { 10L, 4L, "manager", 300f }
+                    { 1L, 1L, "worker", 0f },
+                    { 2L, 2L, "worker", 0f },
+                    { 3L, 3L, "worker", 0f },
+                    { 4L, 5L, "worker", 0f },
+                    { 5L, 1L, "specialist", 0f },
+                    { 6L, 2L, "specialist", 0f },
+                    { 7L, 3L, "specialist", 0f },
+                    { 8L, 4L, "specialist", 0f },
+                    { 9L, 5L, "manager", 0f },
+                    { 10L, 4L, "manager", 0f }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Salary",
+                columns: new[] { "SalaryId", "Active", "SalaryValue", "WorkerId" },
+                values: new object[,]
+                {
+                    { 1L, true, 100f, 1L },
+                    { 2L, true, 100f, 2L },
+                    { 3L, true, 100f, 3L },
+                    { 4L, true, 100f, 4L },
+                    { 5L, true, 200f, 5L },
+                    { 6L, true, 200f, 6L },
+                    { 7L, true, 200f, 7L },
+                    { 8L, true, 200f, 8L },
+                    { 9L, true, 300f, 9L },
+                    { 10L, true, 300f, 10L }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Salary_WorkerId",
+                table: "Salary",
+                column: "WorkerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Worker_PersonId",
@@ -91,6 +135,9 @@ namespace HRManagement.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Salary");
+
             migrationBuilder.DropTable(
                 name: "Worker");
 
