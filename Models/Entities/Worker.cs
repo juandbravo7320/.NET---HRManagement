@@ -10,10 +10,12 @@ namespace HRManagement.Models.Entities
 	{
 		public long WorkerId { get; set; }
 		public long PersonId { get; set; }
-		public long SalaryId { get; set; }
 		public string? Rol { get; set; }
 		public DateTime WorkingStartDate { get; set; }
-		public virtual Person? Person { get; set; }
-		public virtual Salary? Salary { get; set; }
+		public float Salary { get; set; }
+		public Person? Person { get; set; }
+
+		[JsonIgnore]
+		public virtual ICollection<Salary>? Salaries { get; set; }
 	}
 }

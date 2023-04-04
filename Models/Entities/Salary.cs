@@ -12,6 +12,9 @@ namespace HRManagement.Models.Entities
         public long WorkerId {get;set;}
         public DateTime SalaryUpdateDate {get;set;}
         public float SalaryValue {get;set;}
-        public Worker? Worker {get;set;}
+        public bool Active {get;set;}
+
+        [JsonIgnore]
+        public virtual Worker? Worker {get;set;}
     }
 }

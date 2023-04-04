@@ -13,8 +13,8 @@ namespace HRManagement.Models.DTO
 
         public long WorkerId {get;set;}
         public string? Rol {get;set;}
-        public SalaryDTO Salary {get;set;}
         public DateTime WorkingStartDate {get;set;}
+        public float Salary {get;set;}
         public PersonDTO Person {get;set;}
     }
 }

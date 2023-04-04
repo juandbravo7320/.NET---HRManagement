@@ -26,17 +26,25 @@ namespace HRManagement.Services.Service
 
 		public List<WorkerDTO> GetAll()
 		{
-			List<Worker> workers = (context.Workers?.Include(p => p.Person).Include(p => p.Salary)).ToList();
-			return workers.Select(item => workerMapper.mapToWorkerDTO(item)).ToList();
+			List<Worker> workers = (context.Workers?.Include(p => p.Person)).ToList();
+
+			workers.ForEach(worker => {
+				Salary salary = salaryService.GetByWorkerId(worker.WorkerId);
+				worker.Salary = salary.SalaryValue;
+			});
+
+			return workers.Select(worker => workerMapper.mapToWorkerDTO(worker)).ToList();
 		}
 
 		public WorkerDTO GetWorkerById(long id)
 		{
 			Worker worker = context.Workers.Include(w => w.Person)
-											.Include(w => w.Salary)
 											.SingleOrDefault(w => w.WorkerId == id);
 
 			if (worker == null) return null;
+
+			Salary salary = salaryService.GetByWorkerId(worker.WorkerId);
+			worker.Salary = salary.SalaryValue;
 
 			return workerMapper.mapToWorkerDTO(worker);
 		}
@@ -44,6 +52,14 @@ namespace HRManagement.Services.Service
 		public WorkerDTO Save(Worker worker)
 		{
 			Worker workerCreated = context.Add(worker).Entity;
+
+			Salary newSalary = new Salary();
+			newSalary.WorkerId = worker.WorkerId;
+			newSalary.SalaryValue = worker.Salary;
+			newSalary.Active = true;
+
+			salaryService.Save(newSalary);
+
 			context.SaveChanges();
 			return workerMapper.mapToWorkerDTO(workerCreated);
 		}
@@ -55,7 +71,6 @@ namespace HRManagement.Services.Service
 			if (worker == null) return null;
 
 			currentWorker.Rol = worker.Rol;
-			currentWorker.Salary = worker.Salary;
 
 			context.SaveChanges();
 
@@ -74,9 +89,7 @@ namespace HRManagement.Services.Service
 		public bool UpdateSalary(long id, DateTime currentDate)
 		{
 
-			Worker currentWorker = context.Workers.Include(w => w.Person)
-											.Include(w => w.Salary)
-											.SingleOrDefault(w => w.WorkerId == id);
+			Worker currentWorker = context.Workers.SingleOrDefault(w => w.WorkerId == id);
 
 			if (currentWorker == null) return false;
 
@@ -84,14 +97,14 @@ namespace HRManagement.Services.Service
 
 			if (periods == 0) return false;
 
-			Salary previousSalary = currentWorker.Salary;
+			Salary previousSalary = salaryService.GetByWorkerId(id);
 
 			Salary newSalary = new Salary();
 			newSalary.WorkerId = currentWorker.WorkerId;
 			newSalary.SalaryValue = previousSalary.SalaryValue;
-			newSalary.SalaryUpdateDate = currentDate;
-			
-			float currentSalary = currentWorker.Salary!.SalaryValue;
+			newSalary.Active = true;
+
+			float currentSalary = previousSalary.SalaryValue;
 
 			for (int i = 0; i < periods; i++)
 			{
@@ -109,14 +122,17 @@ namespace HRManagement.Services.Service
 				}
 			}
 
-			currentWorker.Salary = newSalary;
-			context.Update<Worker>(currentWorker);
+			salaryService.DisableSalary(previousSalary.SalaryId);
+			context.Add(newSalary);
+			currentWorker.Salary = newSalary.SalaryValue;
 			context.SaveChanges();
+
 
 			return true;
 		}
 
-		public int calculatePeriods(DateTime currentDate, DateTime workingStartDate) {
+		public int calculatePeriods(DateTime currentDate, DateTime workingStartDate)
+		{
 			return (((currentDate.Year - workingStartDate.Year) * 12) + (currentDate.Month - workingStartDate.Month)) / 3;
 		}
 	}

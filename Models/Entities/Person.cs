@@ -15,6 +15,8 @@ namespace HRManagement.Models.Entities
         public string? PersonalAddress {get;set;}
         public int Phone {get;set;}
         public byte[]? Picture {get;set;}
-        public ICollection<Worker>? Workers {get;set;}
+
+        [JsonIgnore]
+        public virtual ICollection<Worker>? Workers {get;set;}
     }
 }

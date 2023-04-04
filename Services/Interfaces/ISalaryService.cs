@@ -12,6 +12,10 @@ namespace HRManagement.Services.Interfaces
 
         Salary GetSalaryById(long id);
 
+        Salary GetByWorkerId(long id);
+
         Salary Save(Salary salary);
+
+        void DisableSalary(long id);
     }
 }
